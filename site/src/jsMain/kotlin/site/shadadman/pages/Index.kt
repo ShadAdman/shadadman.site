@@ -26,13 +26,14 @@ import com.varabyte.kobweb.silk.components.text.SpanText
 import com.varabyte.kobweb.silk.style.CssStyle
 import com.varabyte.kobweb.silk.style.animation.Keyframes
 import com.varabyte.kobweb.silk.style.animation.toAnimation
-import com.varabyte.kobweb.silk.style.base
 import com.varabyte.kobweb.silk.style.toModifier
 import com.varabyte.kobweb.silk.theme.colors.ColorMode
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.dom.*
+import site.shadadman.components.ide.KotlinCodeView
+import site.shadadman.components.ide.LocalViewMode
+import site.shadadman.components.ide.ViewMode
 import site.shadadman.components.layouts.PageLayoutData
-import site.shadadman.toSitePalette
 
 val PulseAnimation = Keyframes {
     0.percent { Modifier.opacity(1f) }
@@ -47,7 +48,7 @@ val AndroidCardStyle = CssStyle {
             .fillMaxWidth()
             .backgroundColor(if (isLight) Color.rgb(0xFFFFFF) else Color.rgb(0x131B2E))
             .borderRadius(1.25.cssRem)
-            .padding(2.cssRem)
+            .padding(1.5.cssRem)
             .styleModifier {
                 property("box-shadow", if (isLight) "0 10px 30px rgba(0, 0, 0, 0.05)" else "0 10px 30px rgba(0, 0, 0, 0.35)")
             }
@@ -61,12 +62,12 @@ val TagPillStyle = CssStyle {
         Modifier
             .backgroundColor(if (isLight) Color.rgb(0xE8F5E9) else Color.rgb(0x103422))
             .color(if (isLight) Color.rgb(0x2E7D32) else Color.rgb(0x4CD964))
-            .padding(0.4.cssRem, 0.9.cssRem)
+            .padding(0.35.cssRem, 0.8.cssRem)
             .borderRadius(2.cssRem)
-            .fontSize(0.85.cssRem)
+            .fontSize(0.8.cssRem)
             .fontWeight(FontWeight.SemiBold)
             .display(DisplayStyle.InlineBlock)
-            .margin(0.25.cssRem)
+            .margin(0.2.cssRem)
     }
 }
 
@@ -78,44 +79,102 @@ val AndroidBadgeStyle = CssStyle {
             .color(if (isLight) Color.rgb(0x0284C7) else Color.rgb(0x38BDF8))
             .padding(0.35.cssRem, 0.8.cssRem)
             .borderRadius(2.cssRem)
-            .fontSize(0.85.cssRem)
+            .fontSize(0.8.cssRem)
             .fontWeight(FontWeight.Medium)
             .display(DisplayStyle.InlineBlock)
-            .margin(0.25.cssRem)
+            .margin(0.2.cssRem)
     }
 }
 
 @InitRoute
 fun initHomePage(ctx: InitRouteContext) {
-    ctx.data.add(PageLayoutData("Home"))
+    ctx.data.add(PageLayoutData("Index.kt"))
 }
 
 @Page
 @Layout(".components.layouts.PageLayout")
 @Composable
 fun HomePage() {
+    val viewMode = LocalViewMode.current
+
+    val kotlinCodeLines = listOf(
+        "package site.shadadman.pages",
+        "",
+        "import site.shadadman.developer.AndroidEngineer",
+        "import site.shadadman.company.Alopeyk",
+        "",
+        "@Page",
+        "@Composable",
+        "fun HomePage() {",
+        "    val developer = AndroidEngineer(",
+        "        name = \"Shad Adman\",",
+        "        title = \"Senior Android Engineer @ Alopeyk\",",
+        "        scale = \"10M+ Users & 500K Active Couriers\",",
+        "        bio = \"\"\"",
+        "            I fell in love with coding when introduced to C++ in my student days,",
+        "            and soon found myself deep in the world of Android. Over the years,",
+        "            I've built robust systems across Health Tech, Digital Retail, Trading,",
+        "            Fintech, and iGaming using Android & Kotlin Multiplatform.",
+        "",
+        "            I am fascinated by on-device AI. Give me a quirky smart home gadget",
+        "            or an old Raspberry Pi, and I can bring it to life—intelligent and",
+        "            fully offline, without relying on the cloud.",
+        "",
+        "            Currently focusing on Kotlin Multiplatform, bridging non-Kotlin languages/platforms",
+        "            with Kotlin, tackling low-level systems, and talking directly to hardware.",
+        "        \"\"\".trimIndent(),",
+        "        specializations = listOf(",
+        "            \"Android Architecture\", \"Kotlin Multiplatform (KMP)\",",
+        "            \"On-Device AI\", \"C++ Low-Level Interop\", \"Hardware & BLE\",",
+        "            \"Health Tech\", \"Fintech & Trading\", \"iGaming\", \"Logistics\"",
+        "        )",
+        "    )",
+        "}"
+    )
+
+    Row(
+        Modifier.fillMaxSize()
+    ) {
+        if (viewMode == ViewMode.CODE) {
+            Box(
+                Modifier.fillMaxSize()
+            ) {
+                KotlinCodeView(kotlinCodeLines)
+            }
+        } else {
+            Box(
+                Modifier
+                    .fillMaxSize()
+                    .padding(1.25.cssRem)
+                    .styleModifier { property("overflow-y", "auto") }
+            ) {
+                RenderHomePreview()
+            }
+        }
+    }
+}
+
+@Composable
+private fun RenderHomePreview() {
     val isLight = ColorMode.current.isLight
-    val primaryColor = if (isLight) Color.rgb(0x2E7D32) else Color.rgb(0x3DDC84) // Android Green
+    val primaryColor = if (isLight) Color.rgb(0x2E7D32) else Color.rgb(0x3DDC84)
 
     Column(
         Modifier
             .fillMaxWidth()
-            .maxWidth(58.cssRem)
-            .margin(topBottom = 2.cssRem)
-            .padding(leftRight = 1.cssRem, bottom = 4.cssRem)
-            .gap(2.cssRem),
-        horizontalAlignment = Alignment.CenterHorizontally
+            .gap(1.5.cssRem),
+        horizontalAlignment = Alignment.Start
     ) {
-        // Status Pill / Developer Badge
+        // Status Pill
         Div(
             Modifier
                 .backgroundColor(if (isLight) Color.rgb(0xE8F5E9) else Color.rgb(0x112C20))
                 .border(1.px, LineStyle.Solid, primaryColor.copyf(alpha = 0.4f))
                 .borderRadius(2.cssRem)
-                .padding(0.5.cssRem, 1.25.cssRem)
+                .padding(0.4.cssRem, 1.cssRem)
                 .display(DisplayStyle.Flex)
                 .alignItems(org.jetbrains.compose.web.css.AlignItems.Center)
-                .gap(0.75.cssRem)
+                .gap(0.6.cssRem)
                 .toAttrs()
         ) {
             Span(
@@ -130,7 +189,7 @@ fun HomePage() {
             Span(
                 Modifier
                     .color(primaryColor)
-                    .fontSize(0.9.cssRem)
+                    .fontSize(0.85.cssRem)
                     .fontWeight(FontWeight.SemiBold)
                     .toAttrs()
             ) {
@@ -138,28 +197,25 @@ fun HomePage() {
             }
         }
 
-        // Hero Title & Tagline
-        Column(
-            Modifier.fillMaxWidth().gap(1.cssRem),
-            horizontalAlignment = Alignment.Start
-        ) {
+        // Hero Title
+        Column(Modifier.fillMaxWidth().gap(0.5.cssRem)) {
             H1(
                 Modifier
-                    .fontSize(clamp(2.5.cssRem, 5.vw, 4.cssRem))
+                    .fontSize(clamp(2.cssRem, 4.vw, 3.2.cssRem))
                     .fontWeight(FontWeight.Bold)
                     .lineHeight(1.15)
                     .margin(0.px)
                     .toAttrs()
             ) {
-                SpanText("Building High-Performance")
+                SpanText("Building")
                 Br()
                 SpanText("Android & Multiplatform Systems", Modifier.color(primaryColor))
             }
 
             P(
                 Modifier
-                    .fontSize(1.2.cssRem)
-                    .lineHeight(1.6)
+                    .fontSize(1.05.cssRem)
+                    .lineHeight(1.5)
                     .color(if (isLight) Color.rgb(0x475569) else Color.rgb(0x94A3B8))
                     .margin(0.px)
                     .toAttrs()
@@ -168,37 +224,35 @@ fun HomePage() {
             }
         }
 
-        // Current Position Card
+        // Position Card
         Div(AndroidCardStyle.toModifier().toAttrs()) {
-            Column(Modifier.fillMaxWidth().gap(1.25.cssRem)) {
-                // Window Control Dots
+            Column(Modifier.fillMaxWidth().gap(1.cssRem)) {
                 Row(
                     Modifier.fillMaxWidth().alignItems(org.jetbrains.compose.web.css.AlignItems.Center),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Row(Modifier.gap(0.4.cssRem)) {
-                        Span(Modifier.width(12.px).height(12.px).borderRadius(50.percent).backgroundColor(Color.rgb(0xFF5F56)).toAttrs()) {}
-                        Span(Modifier.width(12.px).height(12.px).borderRadius(50.percent).backgroundColor(Color.rgb(0xFFBD2E)).toAttrs()) {}
-                        Span(Modifier.width(12.px).height(12.px).borderRadius(50.percent).backgroundColor(Color.rgb(0x27C93F)).toAttrs()) {}
+                        Span(Modifier.width(10.px).height(10.px).borderRadius(50.percent).backgroundColor(Color.rgb(0xFF5F56)).toAttrs()) {}
+                        Span(Modifier.width(10.px).height(10.px).borderRadius(50.percent).backgroundColor(Color.rgb(0xFFBD2E)).toAttrs()) {}
+                        Span(Modifier.width(10.px).height(10.px).borderRadius(50.percent).backgroundColor(Color.rgb(0x27C93F)).toAttrs()) {}
                     }
                     Spacer()
-                    Span(Modifier.fontSize(0.85.cssRem).color(Color.rgb(0x64748B)).fontFamily("monospace").toAttrs()) {
+                    Span(Modifier.fontSize(0.8.cssRem).color(Color.rgb(0x64748B)).fontFamily("monospace").toAttrs()) {
                         Text("current_role.kt")
                     }
                 }
 
                 Div(Modifier.height(1.px).backgroundColor(if (isLight) Color.rgb(0xF1F5F9) else Color.rgb(0x1E293B)).fillMaxWidth().toAttrs()) {}
 
-                // Position Details
-                Column(Modifier.fillMaxWidth().gap(0.5.cssRem)) {
-                    Span(Modifier.fontSize(0.85.cssRem).fontWeight(FontWeight.Bold).color(primaryColor).toAttrs()) {
+                Column(Modifier.fillMaxWidth().gap(0.4.cssRem)) {
+                    Span(Modifier.fontSize(0.8.cssRem).fontWeight(FontWeight.Bold).color(primaryColor).toAttrs()) {
                         Text("CURRENT POSITION")
                     }
-                    H3(Modifier.fontSize(1.4.cssRem).fontWeight(FontWeight.Bold).margin(0.px).toAttrs()) {
+                    H3(Modifier.fontSize(1.25.cssRem).fontWeight(FontWeight.Bold).margin(0.px).toAttrs()) {
                         Text("Senior Android Engineer @ Alopeyk")
                     }
-                    P(Modifier.fontSize(1.05.cssRem).lineHeight(1.6).color(if (isLight) Color.rgb(0x334155) else Color.rgb(0xCBD5E1)).margin(0.px).toAttrs()) {
-                        Text("Working on the core courier application for delivery logistics, empowering over 10 million users and 500,000 active couriers with robust, high-performance mobile experiences.")
+                    P(Modifier.fontSize(0.95.cssRem).lineHeight(1.5).color(if (isLight) Color.rgb(0x334155) else Color.rgb(0xCBD5E1)).margin(0.px).toAttrs()) {
+                        Text("Working on the core courier application for delivery logistics, empowering over 10 million users and 500,000 active couriers with 300K daily orders.")
                     }
                 }
             }
@@ -206,32 +260,32 @@ fun HomePage() {
 
         // Bio Card
         Div(AndroidCardStyle.toModifier().toAttrs()) {
-            Column(Modifier.fillMaxWidth().gap(1.25.cssRem)) {
-                H3(Modifier.fontSize(1.4.cssRem).fontWeight(FontWeight.Bold).margin(0.px).toAttrs()) {
+            Column(Modifier.fillMaxWidth().gap(1.cssRem)) {
+                H3(Modifier.fontSize(1.25.cssRem).fontWeight(FontWeight.Bold).margin(0.px).toAttrs()) {
                     Text("About Me & Journey")
                 }
 
-                P(Modifier.fontSize(1.05.cssRem).lineHeight(1.65).color(if (isLight) Color.rgb(0x334155) else Color.rgb(0xCBD5E1)).margin(0.px).toAttrs()) {
+                P(Modifier.fontSize(0.95.cssRem).lineHeight(1.55).color(if (isLight) Color.rgb(0x334155) else Color.rgb(0xCBD5E1)).margin(0.px).toAttrs()) {
                     Text("I fell in love with coding when introduced to C++ in my student days, and soon found myself deep in the world of Android. Over the years, I've built robust systems across Health Tech, Digital Retail, Trading, Fintech, and iGaming using Android & Kotlin Multiplatform.")
                 }
 
-                P(Modifier.fontSize(1.05.cssRem).lineHeight(1.65).color(if (isLight) Color.rgb(0x334155) else Color.rgb(0xCBD5E1)).margin(0.px).toAttrs()) {
+                P(Modifier.fontSize(0.95.cssRem).lineHeight(1.55).color(if (isLight) Color.rgb(0x334155) else Color.rgb(0xCBD5E1)).margin(0.px).toAttrs()) {
                     Text("I am fascinated by on-device AI. Give me a quirky smart home gadget or an old Raspberry Pi, and I can bring it to life—intelligent and fully offline, without relying on the cloud.")
                 }
 
-                P(Modifier.fontSize(1.05.cssRem).lineHeight(1.65).color(if (isLight) Color.rgb(0x334155) else Color.rgb(0xCBD5E1)).margin(0.px).toAttrs()) {
+                P(Modifier.fontSize(0.95.cssRem).lineHeight(1.55).color(if (isLight) Color.rgb(0x334155) else Color.rgb(0xCBD5E1)).margin(0.px).toAttrs()) {
                     Text("Currently focusing on Kotlin Multiplatform, bridging non-Kotlin languages/platforms with Kotlin, tackling low-level systems, and talking directly to hardware.")
                 }
             }
         }
 
-        // Core Focus & Domains Card
+        // Expertise Pills
         Div(AndroidCardStyle.toModifier().toAttrs()) {
-            Column(Modifier.fillMaxWidth().gap(1.25.cssRem)) {
-                H3(Modifier.fontSize(1.3.cssRem).fontWeight(FontWeight.Bold).margin(0.px).toAttrs()) {
+            Column(Modifier.fillMaxWidth().gap(0.8.cssRem)) {
+                H3(Modifier.fontSize(1.2.cssRem).fontWeight(FontWeight.Bold).margin(0.px).toAttrs()) {
                     Text("Expertise & Domains")
                 }
-                Div(Modifier.display(DisplayStyle.Flex).flexWrap(FlexWrap.Wrap).gap(0.4.cssRem).toAttrs()) {
+                Div(Modifier.display(DisplayStyle.Flex).flexWrap(FlexWrap.Wrap).gap(0.3.cssRem).toAttrs()) {
                     Span(TagPillStyle.toModifier().toAttrs()) { Text("Android") }
                     Span(TagPillStyle.toModifier().toAttrs()) { Text("Kotlin Multiplatform (KMP)") }
                     Span(AndroidBadgeStyle.toModifier().toAttrs()) { Text("On-Device AI & TFLite") }
@@ -241,14 +295,13 @@ fun HomePage() {
                     Span(TagPillStyle.toModifier().toAttrs()) { Text("Fintech & Trading") }
                     Span(TagPillStyle.toModifier().toAttrs()) { Text("iGaming") }
                     Span(TagPillStyle.toModifier().toAttrs()) { Text("Digital Retail & Logistics") }
-                    Span(AndroidBadgeStyle.toModifier().toAttrs()) { Text("Clean Architecture & MVI") }
                 }
             }
         }
 
-        // Action Buttons
+        // Quick Links
         Row(
-            Modifier.fillMaxWidth().gap(1.cssRem).flexWrap(FlexWrap.Wrap),
+            Modifier.fillMaxWidth().gap(0.75.cssRem).flexWrap(FlexWrap.Wrap),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Link(
@@ -257,8 +310,8 @@ fun HomePage() {
                 Modifier
                     .backgroundColor(primaryColor)
                     .color(if (isLight) Colors.White else Color.rgb(0x06080B))
-                    .padding(0.8.cssRem, 1.6.cssRem)
-                    .borderRadius(1.cssRem)
+                    .padding(0.6.cssRem, 1.25.cssRem)
+                    .borderRadius(0.75.cssRem)
                     .fontWeight(FontWeight.SemiBold)
                     .textDecorationLine(TextDecorationLine.None),
                 variant = UncoloredLinkVariant.then(UndecoratedLinkVariant)
@@ -269,20 +322,8 @@ fun HomePage() {
                 Modifier
                     .backgroundColor(if (isLight) Color.rgb(0xE2E8F0) else Color.rgb(0x1E293B))
                     .color(if (isLight) Color.rgb(0x0F172A) else Color.rgb(0xF8FAFC))
-                    .padding(0.8.cssRem, 1.6.cssRem)
-                    .borderRadius(1.cssRem)
-                    .fontWeight(FontWeight.SemiBold)
-                    .textDecorationLine(TextDecorationLine.None),
-                variant = UncoloredLinkVariant.then(UndecoratedLinkVariant)
-            )
-            Link(
-                "https://github.com/ShadAdman",
-                "GitHub Profile",
-                Modifier
-                    .backgroundColor(if (isLight) Color.rgb(0xE2E8F0) else Color.rgb(0x1E293B))
-                    .color(if (isLight) Color.rgb(0x0F172A) else Color.rgb(0xF8FAFC))
-                    .padding(0.8.cssRem, 1.6.cssRem)
-                    .borderRadius(1.cssRem)
+                    .padding(0.6.cssRem, 1.25.cssRem)
+                    .borderRadius(0.75.cssRem)
                     .fontWeight(FontWeight.SemiBold)
                     .textDecorationLine(TextDecorationLine.None),
                 variant = UncoloredLinkVariant.then(UndecoratedLinkVariant)

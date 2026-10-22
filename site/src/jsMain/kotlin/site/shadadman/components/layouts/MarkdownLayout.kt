@@ -4,8 +4,11 @@ import androidx.compose.runtime.Composable
 import com.varabyte.kobweb.compose.css.FontWeight
 import com.varabyte.kobweb.compose.css.Overflow
 import com.varabyte.kobweb.compose.css.OverflowWrap
+import com.varabyte.kobweb.compose.foundation.layout.Box
+import com.varabyte.kobweb.compose.foundation.layout.Row
 import com.varabyte.kobweb.compose.ui.Modifier
 import com.varabyte.kobweb.compose.ui.modifiers.*
+import com.varabyte.kobweb.compose.ui.styleModifier
 import com.varabyte.kobweb.core.data.add
 import com.varabyte.kobweb.core.init.InitRoute
 import com.varabyte.kobweb.core.init.InitRouteContext
@@ -16,6 +19,7 @@ import com.varabyte.kobweb.silk.theme.colors.palette.color
 import com.varabyte.kobweb.silk.theme.colors.palette.toPalette
 import com.varabyte.kobwebx.markdown.markdown
 import org.jetbrains.compose.web.css.DisplayStyle
+import org.jetbrains.compose.web.css.FlexWrap
 import org.jetbrains.compose.web.css.LineStyle
 import org.jetbrains.compose.web.css.cssRem
 import org.jetbrains.compose.web.css.px
@@ -27,31 +31,31 @@ val MarkdownStyle = CssStyle {
 
     cssRule("h1") {
         Modifier
-            .fontSize(3.cssRem)
-            .fontWeight(400)
-            .margin(bottom = 2.5.cssRem)
-            .lineHeight(1.2) //1.5x doesn't look as good on very large text
+            .fontSize(2.4.cssRem)
+            .fontWeight(600)
+            .margin(bottom = 1.5.cssRem)
+            .lineHeight(1.2)
     }
 
     cssRule("h2") {
         Modifier
-            .fontSize(3.cssRem)
-            .fontWeight(300)
-            .margin(topBottom = 2.cssRem)
+            .fontSize(1.8.cssRem)
+            .fontWeight(600)
+            .margin(topBottom = 1.25.cssRem)
     }
 
     cssRule("h3") {
         Modifier
-            .fontSize(2.4.cssRem)
-            .fontWeight(300)
-            .margin(topBottom = 1.5.cssRem)
+            .fontSize(1.4.cssRem)
+            .fontWeight(500)
+            .margin(topBottom = 1.cssRem)
     }
 
     cssRule("h4") {
         Modifier
-            .fontSize(1.2.cssRem)
+            .fontSize(1.1.cssRem)
             .fontWeight(FontWeight.Bolder)
-            .margin(top = 1.cssRem, bottom = 0.5.cssRem)
+            .margin(top = 0.8.cssRem, bottom = 0.4.cssRem)
     }
 
     cssRule("ul") {
@@ -70,9 +74,10 @@ val MarkdownStyle = CssStyle {
 
     cssRule("pre") {
         Modifier
-            .margin(top = 0.5.cssRem, bottom = 2.cssRem)
+            .margin(top = 0.5.cssRem, bottom = 1.5.cssRem)
             .fillMaxWidth()
     }
+
     cssRule("pre > code") {
         Modifier
             .display(DisplayStyle.Block)
@@ -81,23 +86,33 @@ val MarkdownStyle = CssStyle {
             .border(1.px, LineStyle.Solid, colorMode.toPalette().color)
             .borderRadius(0.25.cssRem)
             .padding(0.5.cssRem)
-            .fontSize(1.cssRem)
+            .fontSize(0.9.cssRem)
             .overflow { x(Overflow.Auto) }
     }
 }
 
 @InitRoute
 fun initMarkdownLayout(ctx: InitRouteContext) {
-    val title = ctx.markdown!!.frontMatter["title"]?.singleOrNull()
-    require(title != null) { "Markdown file must set \"title\" in frontmatter" }
-
-    ctx.data.add(PageLayoutData(title))
+    val filename = ctx.route.path.split("/").lastOrNull()?.let { if (it.endsWith(".md")) it else "$it.md" } ?: "Document.md"
+    ctx.data.add(PageLayoutData(filename))
 }
 
 @Composable
 @Layout(".components.layouts.PageLayout")
 fun MarkdownLayout(content: @Composable () -> Unit) {
-    Div(MarkdownStyle.toAttrs()) {
-        content()
+    Row(
+        Modifier.fillMaxSize().flexWrap(FlexWrap.Wrap)
+    ) {
+        Box(
+            Modifier
+                .weight(1f)
+                .fillMaxHeight()
+                .padding(1.5.cssRem)
+                .styleModifier { property("overflow-y", "auto") }
+        ) {
+            Div(MarkdownStyle.toAttrs()) {
+                content()
+            }
+        }
     }
 }
