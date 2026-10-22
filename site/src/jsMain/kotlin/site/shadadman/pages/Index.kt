@@ -109,7 +109,7 @@ fun HomePage() {
         "    val developer = AndroidEngineer(",
         "        name = \"Shad Adman\",",
         "        title = \"Senior Android Engineer @ Alopeyk\",",
-        "        scale = \"10M+ Users & 500K Active Couriers\",",
+        "        scale = \"10M+ Users & 500K Active Couriers with 300K daily orders\",",
         "        bio = \"\"\"",
         "            I fell in love with coding when introduced to C++ in my student days,",
         "            and soon found myself deep in the world of Android. Over the years,",
