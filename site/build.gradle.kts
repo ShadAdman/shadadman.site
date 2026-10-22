@@ -1,4 +1,5 @@
 import com.varabyte.kobweb.gradle.application.util.configAsKobwebApplication
+import kotlinx.html.link
 
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
@@ -14,6 +15,13 @@ kobweb {
     app {
         index {
             description.set("Shad Adman Website")
+            head.add {
+                link {
+                    rel = "icon"
+                    type = "image/jpeg"
+                    href = "/me.jpg"
+                }
+            }
         }
     }
 }
