@@ -10,7 +10,13 @@ A seasoned Android Developer with twelve years of experience. What makes this pe
 ---
 
 ## Work Experience
-#### Senior Android Engineer @ Bit24.cash - FullTime/Hybrid ----------> Sept 2025 - Present
+#### Senior Android Engineer @ Alopeyk - FullTime/OnSite ----------> Aug 2026 - Present
+- Delivery logistics application empowering over 10 million users and 500,000 active couriers with 300K daily orders
+- Responsible for converting the single module codebase into a multi-modular feature-based architecture, improving build pipeline times
+- Responsible for implementing the courier application, making a smooth experience for drivers
+- Encouraged teammates to use AI on a large production scale, speeding up the dev process & releases
+
+#### Senior Android Engineer @ Bit24.cash - FullTime/Hybrid ----------> Sept 2025 - Aug 2026
 - Crypto exchange ecosystem with over 2 million active users
 - Responsible for implementing features in a squad based team, with each squad owning a specific area
 - Responsible for migrating to KMP in order to target iOS & growing our users by an unimaginable number
