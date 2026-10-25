@@ -5,7 +5,7 @@ import com.varabyte.kobweb.compose.css.FontWeight
 import com.varabyte.kobweb.compose.css.Overflow
 import com.varabyte.kobweb.compose.css.OverflowWrap
 import com.varabyte.kobweb.compose.foundation.layout.Box
-import com.varabyte.kobweb.compose.foundation.layout.Row
+import com.varabyte.kobweb.compose.foundation.layout.Column
 import com.varabyte.kobweb.compose.ui.Modifier
 import com.varabyte.kobweb.compose.ui.modifiers.*
 import com.varabyte.kobweb.compose.ui.styleModifier
@@ -15,24 +15,24 @@ import com.varabyte.kobweb.core.init.InitRouteContext
 import com.varabyte.kobweb.core.layout.Layout
 import com.varabyte.kobweb.silk.style.CssStyle
 import com.varabyte.kobweb.silk.style.toAttrs
+import com.varabyte.kobweb.silk.theme.colors.ColorMode
 import com.varabyte.kobweb.silk.theme.colors.palette.color
 import com.varabyte.kobweb.silk.theme.colors.palette.toPalette
-import com.varabyte.kobwebx.markdown.markdown
 import org.jetbrains.compose.web.css.DisplayStyle
-import org.jetbrains.compose.web.css.FlexWrap
 import org.jetbrains.compose.web.css.LineStyle
 import org.jetbrains.compose.web.css.cssRem
 import org.jetbrains.compose.web.css.px
 import org.jetbrains.compose.web.dom.Div
+import site.shadadman.components.sections.NavHeader
 import site.shadadman.toSitePalette
 
 val MarkdownStyle = CssStyle {
-    base { Modifier.fillMaxSize() }
+    base { Modifier.fillMaxWidth() }
 
     cssRule("h1") {
         Modifier
             .fontSize(2.4.cssRem)
-            .fontWeight(600)
+            .fontWeight(700)
             .margin(bottom = 1.5.cssRem)
             .lineHeight(1.2)
     }
@@ -41,21 +41,21 @@ val MarkdownStyle = CssStyle {
         Modifier
             .fontSize(1.8.cssRem)
             .fontWeight(600)
-            .margin(topBottom = 1.25.cssRem)
+            .margin(top = 2.cssRem, bottom = 1.cssRem)
     }
 
     cssRule("h3") {
         Modifier
             .fontSize(1.4.cssRem)
             .fontWeight(500)
-            .margin(topBottom = 1.cssRem)
+            .margin(top = 1.5.cssRem, bottom = 0.75.cssRem)
     }
 
     cssRule("h4") {
         Modifier
             .fontSize(1.1.cssRem)
             .fontWeight(FontWeight.Bolder)
-            .margin(top = 0.8.cssRem, bottom = 0.4.cssRem)
+            .margin(top = 1.cssRem, bottom = 0.4.cssRem)
     }
 
     cssRule("ul") {
@@ -63,12 +63,12 @@ val MarkdownStyle = CssStyle {
     }
 
     cssRule(" :is(li,ol,ul)") {
-        Modifier.margin(bottom = 0.25.cssRem)
+        Modifier.margin(bottom = 0.4.cssRem)
     }
 
     cssRule("code") {
         Modifier
-            .color(colorMode.toPalette().color.toRgb().copyf(alpha = 0.8f))
+            .color(colorMode.toPalette().color.toRgb().copyf(alpha = 0.9f))
             .fontWeight(FontWeight.Bolder)
     }
 
@@ -84,8 +84,8 @@ val MarkdownStyle = CssStyle {
             .fillMaxWidth()
             .backgroundColor(colorMode.toSitePalette().nearBackground)
             .border(1.px, LineStyle.Solid, colorMode.toPalette().color)
-            .borderRadius(0.25.cssRem)
-            .padding(0.5.cssRem)
+            .borderRadius(0.5.cssRem)
+            .padding(1.cssRem)
             .fontSize(0.9.cssRem)
             .overflow { x(Overflow.Auto) }
     }
@@ -100,16 +100,24 @@ fun initMarkdownLayout(ctx: InitRouteContext) {
 @Composable
 @Layout(".components.layouts.PageLayout")
 fun MarkdownLayout(content: @Composable () -> Unit) {
-    Row(
-        Modifier.fillMaxSize().flexWrap(FlexWrap.Wrap)
+    Box(
+        Modifier
+            .fillMaxSize()
+            .padding(topBottom = 2.cssRem, leftRight = 1.5.cssRem)
+            .styleModifier { property("overflow-y", "auto") }
     ) {
-        Box(
+        Column(
             Modifier
-                .weight(1f)
-                .fillMaxHeight()
-                .padding(1.5.cssRem)
-                .styleModifier { property("overflow-y", "auto") }
+                .fillMaxWidth()
+                .maxWidth(920.px)
+                .styleModifier {
+                    property("margin-left", "auto")
+                    property("margin-right", "auto")
+                }
+                .gap(2.cssRem)
         ) {
+            NavHeader()
+
             Div(MarkdownStyle.toAttrs()) {
                 content()
             }

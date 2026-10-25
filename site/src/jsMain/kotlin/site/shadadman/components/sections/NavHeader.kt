@@ -54,12 +54,9 @@ private fun NavLink(path: String, text: String) {
 @Composable
 private fun MenuItems() {
     NavLink("/", "Home")
-    NavLink("/worklog/worklog", "WorkLog")
-    NavLink("/videos","Videos")
-    NavLink("https://medium.com/@adman.shadman", "Articles")
     NavLink("https://github.com/ShadAdman", "OpenSource")
-    NavLink("https://github.com/BeyondKotlin", "BeyondKotlin")
     NavLink("/resume", "Resume")
+    NavLink("/worklog/worklog", "WorkLog")
 }
 
 @Composable
